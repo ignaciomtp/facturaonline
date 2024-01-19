@@ -30,7 +30,7 @@ export default {
                 {
                     title: 'Una cosa',
                     description: 'lalala',
-                    qty: 1,
+                    quantity: 1,
                     price: 10.0,
                     subtotal: 10.0,
                 }
@@ -42,7 +42,7 @@ export default {
             let item = {
                 title: '',
                 description: '',
-                qty: 1,
+                quantity: 1,
                 price: 0.0,
                 subtotal: 0.0
             };
@@ -54,6 +54,10 @@ export default {
             console.log('items before: ', this.items);
             this.items.splice(index, 1);
             console.log('items after: ', this.items);
+        },
+        changeItem(obj) {
+            console.log('OBJ: ', obj);
+            this.items[obj.index][obj.field] = obj.value;
         }
     }
 }
@@ -117,12 +121,13 @@ export default {
                         <InvoiceItem v-for="(item, index) in items" :key="index + 1"
                             :title="item.title"
                             :description="item.description"
-                            :quantity="item.qty"
+                            :quantity="item.quantity"
                             :price="item.price"
                             :subtotal="item.subtotal"
                             :index="index"
                             @item-added="addItem"
                             @item-removed="deleteItem"
+                            @value-changed="changeItem"
                          />
 
                         
