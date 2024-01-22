@@ -73,7 +73,11 @@ export default {
 				</select>
 			</div>
 			<div class="col-span-1">
-				<input type="number" step='0.01' class="inp text-right" :value="subtotal" @input="valueChanged(index, 'subtotal', $event.target.value)">
+				<div class="relative">
+					<div class="absolute right-2 pt-[6px] text-gray-400">€</div>
+					<input type="number" step='0.01' class="inp text-right" :value="subtotal" @input="valueChanged(index, 'subtotal', $event.target.value)">
+				</div>
+				
 			</div>
 			<div class="col-span-1 flex space-around">
 				<RoundAddButton @click="newItem()" />

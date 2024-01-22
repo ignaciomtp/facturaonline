@@ -184,7 +184,10 @@ export default {
                                     <div class="col-span-7"></div>
                                     <div class="col-span-1">Subtotal</div>
                                     <div class="col-span-1">
-                                        <input type="number" step='0.01' class="inp text-right" :value="subtotalFra">
+                                        <div class="relative">
+                                            <div class="absolute right-2 pt-[6px] text-gray-400">€</div>
+                                            <input type="number" step='0.01' class="inp text-right" :value="subtotalFra">
+                                        </div>
                                     </div>
                                  </div>
                             </div>
@@ -194,7 +197,10 @@ export default {
                                     <div class="col-span-7"></div>
                                     <div class="col-span-1">IVA</div>
                                     <div class="col-span-1">
-                                        <input type="number" step='0.01' class="inp text-right" :value="iva" >
+                                        <div class="relative">
+                                            <div class="absolute right-2 pt-[6px] text-gray-400">€</div>
+                                            <input type="number" step='0.01' class="inp text-right" :value="iva" >
+                                        </div>
                                     </div>
                                  </div>
                             </div>
@@ -204,7 +210,10 @@ export default {
                                     <div class="col-span-7"></div>
                                     <div class="col-span-1">Total</div>
                                     <div class="col-span-1">
-                                        <input type="number" step='0.01' class="inp text-right" :value="totalFra" >
+                                        <div class="relative">
+                                            <div class="absolute right-2 pt-[6px] text-gray-400">€</div>
+                                            <input type="number" step='0.01' class="inp text-right" :value="totalFra" >
+                                        </div>
                                     </div>
                                  </div>
                             </div>                           
