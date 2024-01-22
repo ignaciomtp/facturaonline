@@ -20,6 +20,10 @@ const isDark = useDark({
     }
 });
 const toggleDark = useToggle(isDark); 
+
+
+const recEqValues = [5.2, 1.4, 0.5, 1.75];
+
 </script>
 
 <script>
@@ -31,10 +35,15 @@ export default {
                     title: 'Una cosa',
                     description: 'lalala',
                     quantity: 1,
-                    price: 10.0,
-                    subtotal: 10.0,
+                    price: 0,
+                    discount: 0,
+                    vat: 21,
+                    subtotal: 0.0,
                 }
-            ]
+            ],
+            subtotalFra: 0,
+            iva: 0,
+            totalFra: 0,
         };
     },
     methods: {
@@ -44,20 +53,47 @@ export default {
                 description: '',
                 quantity: 1,
                 price: 0.0,
+                discount: 0,
+                vat: 21,
                 subtotal: 0.0
             };
 
             this.items.push(item);
         },
         deleteItem(index) {
-            console.log('Index: ', index);
-            console.log('items before: ', this.items);
+
             this.items.splice(index, 1);
-            console.log('items after: ', this.items);
+
+            this.recalculate();
         },
         changeItem(obj) {
             console.log('OBJ: ', obj);
             this.items[obj.index][obj.field] = obj.value;
+
+            if(obj.field == 'quantity' || obj.field == 'price' || obj.field == 'discount') {
+                let subTotal =  this.items[obj.index].quantity * this.items[obj.index].price; 
+
+                let dto = subTotal * this.items[obj.index].discount / 100;
+
+                this.items[obj.index].subtotal = subTotal - dto;
+
+                this.recalculate();
+            }
+        },
+        recalculate() {
+            this.reset();
+            this.items.forEach(elem => {
+                this.subtotalFra += elem.subtotal;
+                let vat = elem.subtotal * elem.vat / 100;
+                this.iva += vat;
+            });
+
+            this.totalFra = this.subtotalFra + this.iva;
+        },
+        reset() {
+            this.subtotalFra = 0;
+            this.iva = 0;
+            this.totalFra = 0;
         }
     }
 }
@@ -118,11 +154,23 @@ export default {
                     </div>
 
                     <div class="mt-8">
+                        <div class=" space-y-4">
+                            <div class="grid grid-cols-10 gap-1 py-2">
+                                <div class="col-span-4">Concepto</div>
+                                <div class="col-span-1">Cantidad</div>
+                                <div class="col-span-1">Precio</div>
+                                <div class="col-span-1">Dto. %</div>
+                                <div class="col-span-1">IVA %</div>
+                                <div class="col-span-1">Subtotal</div>
+                            </div>
+                        </div>
                         <InvoiceItem v-for="(item, index) in items" :key="index + 1"
                             :title="item.title"
                             :description="item.description"
                             :quantity="item.quantity"
                             :price="item.price"
+                            :discount="item.discount"
+                            :vat="item.vat"
                             :subtotal="item.subtotal"
                             :index="index"
                             @item-added="addItem"
@@ -130,6 +178,37 @@ export default {
                             @value-changed="changeItem"
                          />
 
+                        <div class="mt-4">
+                            <div class="my-2">
+                                 <div class="grid grid-cols-10 gap-1 py-2">
+                                    <div class="col-span-7"></div>
+                                    <div class="col-span-1">Subtotal</div>
+                                    <div class="col-span-1">
+                                        <input type="number" step='0.01' class="inp text-right" :value="subtotalFra">
+                                    </div>
+                                 </div>
+                            </div>
+
+                            <div class="my-2">
+                                 <div class="grid grid-cols-10 gap-1 py-2">
+                                    <div class="col-span-7"></div>
+                                    <div class="col-span-1">IVA</div>
+                                    <div class="col-span-1">
+                                        <input type="number" step='0.01' class="inp text-right" :value="iva" >
+                                    </div>
+                                 </div>
+                            </div>
+
+                            <div class="my-2">
+                                 <div class="grid grid-cols-10 gap-1 py-2">
+                                    <div class="col-span-7"></div>
+                                    <div class="col-span-1">Total</div>
+                                    <div class="col-span-1">
+                                        <input type="number" step='0.01' class="inp text-right" :value="totalFra" >
+                                    </div>
+                                 </div>
+                            </div>                           
+                        </div>
                         
                     </div>
 
@@ -148,16 +227,7 @@ export default {
     </div>
     
 
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
 
-        <div>
-            <Link href="/">
-                
-            </Link>
-        </div>
-
-
-    </div>
 </template>
 
 <style>

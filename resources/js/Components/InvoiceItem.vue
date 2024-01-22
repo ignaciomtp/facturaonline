@@ -7,9 +7,13 @@ defineProps({
 	description: String,
 	quantity: Number,
 	price: Number,
+	discount: Number,
+	vat: Number,
 	subtotal: Number,
 	index: Number,
 });
+
+const vatValues = [21, 10, 4];
 
 </script>
 
@@ -32,7 +36,10 @@ export default {
 			};
 
 			this.$emit('value-changed', newVal);
-		}
+
+			
+		},
+
 	},
 	emits: [
 		'item-added',
@@ -50,15 +57,25 @@ export default {
 				<textarea class="inp" @change="valueChanged(index, 'description', $event.target.value)">{{ description }}</textarea>
 			</div>
 			<div class="col-span-1">
-				<input class="inp" :value="quantity" @change="valueChanged(index, 'quantity', $event.target.value)">
-			</div>
-			<div class="col-span-2">
-				<input class="inp" :value="price" @change="valueChanged(index, 'price', $event.target.value)">
-			</div>
-			<div class="col-span-2">
-				<input class="inp" :value="subtotal" @change="valueChanged(index, 'subtotal', $event.target.value)">
+				<input type="number" class="inp text-right" :value="quantity" @change="valueChanged(index, 'quantity', $event.target.value)">
 			</div>
 			<div class="col-span-1">
+				<input type="number" step='0.01' class="inp text-right" :value="price" @change="valueChanged(index, 'price', $event.target.value)">
+			</div>
+			<div class="col-span-1">
+				<input type="number" step='0.01' class="inp text-right" :value="discount" @input="valueChanged(index, 'discount', $event.target.value)">
+			</div>
+			<div class="col-span-1">
+				<select class="inp text-right" @input="valueChanged(index, 'vat', $event.target.value)">
+					<option :value="vatValues[0]" :selected="vatValues[0] == vat">{{ vatValues[0] }} </option>
+					<option :value="vatValues[1]" :selected="vatValues[1] == vat">{{ vatValues[1] }} </option>
+					<option :value="vatValues[2]" :selected="vatValues[20] == vat">{{ vatValues[2] }} </option>
+				</select>
+			</div>
+			<div class="col-span-1">
+				<input type="number" step='0.01' class="inp text-right" :value="subtotal" @input="valueChanged(index, 'subtotal', $event.target.value)">
+			</div>
+			<div class="col-span-1 flex space-around">
 				<RoundAddButton @click="newItem()" />
 				<span v-if="index > 0"><RoundDeleteButton @click="removeItem(index)" /></span>
 
