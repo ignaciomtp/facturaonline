@@ -38,12 +38,14 @@ export default {
                     price: 0,
                     discount: 0,
                     vat: 21,
-                    subtotal: 0.0,
+                    subtotal: 0,
+                    
                 }
             ],
             subtotalFra: 0,
             iva: 0,
             totalFra: 0,
+            totalFraStr: '',
         };
     },
     methods: {
@@ -52,10 +54,11 @@ export default {
                 title: '',
                 description: '',
                 quantity: 1,
-                price: 0.0,
+                price: 0,
                 discount: 0,
                 vat: 21,
-                subtotal: 0.0
+                subtotal: 0,
+                
             };
 
             this.items.push(item);
@@ -70,7 +73,7 @@ export default {
             console.log('OBJ: ', obj);
             this.items[obj.index][obj.field] = obj.value;
 
-            if(obj.field == 'quantity' || obj.field == 'price' || obj.field == 'discount') {
+            if(obj.field == 'quantity' || obj.field == 'price' || obj.field == 'discount' || obj.field == 'vat') {
                 let subTotal =  this.items[obj.index].quantity * this.items[obj.index].price; 
 
                 let dto = subTotal * this.items[obj.index].discount / 100;
@@ -89,11 +92,19 @@ export default {
             });
 
             this.totalFra = this.subtotalFra + this.iva;
+            this.totalFra = this.formatValue(this.totalFra);
+            this.iva = this.formatValue(this.iva);
+            this.subtotalFra = this.formatValue(this.subtotalFra);
         },
         reset() {
             this.subtotalFra = 0;
             this.iva = 0;
             this.totalFra = 0;
+        },
+        formatValue(value) {
+            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
+                value
+            );
         }
     }
 }
@@ -184,10 +195,7 @@ export default {
                                     <div class="col-span-7"></div>
                                     <div class="col-span-1">Subtotal</div>
                                     <div class="col-span-1">
-                                        <div class="relative">
-                                            <div class="absolute right-2 pt-[6px] text-gray-400">€</div>
-                                            <input type="number" step='0.01' class="inp text-right" :value="subtotalFra">
-                                        </div>
+                                        <input type="text" class="inp text-right" :value="subtotalFra">
                                     </div>
                                  </div>
                             </div>
@@ -197,10 +205,7 @@ export default {
                                     <div class="col-span-7"></div>
                                     <div class="col-span-1">IVA</div>
                                     <div class="col-span-1">
-                                        <div class="relative">
-                                            <div class="absolute right-2 pt-[6px] text-gray-400">€</div>
-                                            <input type="number" step='0.01' class="inp text-right" :value="iva" >
-                                        </div>
+                                        <input type="text" class="inp text-right" :value="iva" >
                                     </div>
                                  </div>
                             </div>
@@ -210,10 +215,7 @@ export default {
                                     <div class="col-span-7"></div>
                                     <div class="col-span-1">Total</div>
                                     <div class="col-span-1">
-                                        <div class="relative">
-                                            <div class="absolute right-2 pt-[6px] text-gray-400">€</div>
-                                            <input type="number" step='0.01' class="inp text-right" :value="totalFra" >
-                                        </div>
+                                        <input type="text" class="inp text-right" :value="totalFra" >
                                     </div>
                                  </div>
                             </div>                           

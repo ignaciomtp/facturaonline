@@ -27,7 +27,7 @@ export default {
 			this.$emit('item-removed', index);
 		},
 		valueChanged(index, field, value) {
-			if(field != 'title' && field != 'description') value = parseInt(value);
+			if(field != 'title' && field != 'description') value = parseFloat(value);
 
 			const newVal = {
 				index: index,
@@ -36,10 +36,13 @@ export default {
 			};
 
 			this.$emit('value-changed', newVal);
-
 			
 		},
-
+		formatValue(value) {
+            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
+                value
+            );
+        }
 	},
 	emits: [
 		'item-added',
@@ -66,17 +69,14 @@ export default {
 				<input type="number" step='0.01' class="inp text-right" :value="discount" @input="valueChanged(index, 'discount', $event.target.value)">
 			</div>
 			<div class="col-span-1">
-				<select class="inp text-right" @input="valueChanged(index, 'vat', $event.target.value)">
+				<select class="inp text-center" @change="valueChanged(index, 'vat', $event.target.value)">
 					<option :value="vatValues[0]" :selected="vatValues[0] == vat">{{ vatValues[0] }} </option>
 					<option :value="vatValues[1]" :selected="vatValues[1] == vat">{{ vatValues[1] }} </option>
 					<option :value="vatValues[2]" :selected="vatValues[20] == vat">{{ vatValues[2] }} </option>
 				</select>
 			</div>
 			<div class="col-span-1">
-				<div class="relative">
-					<div class="absolute right-2 pt-[6px] text-gray-400">€</div>
-					<input type="number" step='0.01' class="inp text-right" :value="subtotal" @input="valueChanged(index, 'subtotal', $event.target.value)">
-				</div>
+				<input type="text" class="inp text-right" :value="formatValue(subtotal)" @input="valueChanged(index, 'subtotal', $event.target.value)">
 				
 			</div>
 			<div class="col-span-1 flex space-around">
