@@ -22,7 +22,12 @@ const isDark = useDark({
 const toggleDark = useToggle(isDark); 
 
 
-const recEqValues = [5.2, 1.4, 0.5, 1.75];
+const recEqValues = {
+    '21': 5.2,
+    '10': 1.4,
+    '4': 0.5,
+    'tabaco': 1.75
+};
 
 </script>
 
@@ -117,9 +122,9 @@ export default {
 
     <div class="relative flex flex-col min-h-screen px-4 py-6 md:px-10 bg-slate-50 dark:bg-slate-800 font-outfit sm:py-12">
         
-        <div class="md:mx-auto border border-blue-300">
+        <div class="md:mx-auto ">
             <div class="flex flex-col justify-between w-full  sm:space-x-8 lg:flex-row md:flex-col sm:space-y-0">
-                <div class="p-5 bg-white max-w-7xl rounded-2xl sm:p-10 dark:bg-slate-900">
+                <div class="p-5 bg-white max-w-7xl rounded-2xl sm:p-10 dark:bg-slate-900 border border-blue-300">
                     col 1
                     <Switch @click="toggleDark()" />
 
@@ -164,10 +169,10 @@ export default {
                         </div>
                     </div>
 
-                    <div class="mt-8">
-                        <div class=" space-y-4">
+                    <div class="mt-8 max-sm:pt-4">
+                        <div class=" space-y-4 max-sm:hidden">
                             <div class="grid grid-cols-10 gap-1 py-2">
-                                <div class="col-span-4">Concepto</div>
+                                <div class="col-span-4 md:col-span-10">Concepto</div>
                                 <div class="col-span-1">Cantidad</div>
                                 <div class="col-span-1">Precio</div>
                                 <div class="col-span-1">Dto. %</div>
@@ -189,43 +194,36 @@ export default {
                             @value-changed="changeItem"
                          />
 
-                        <div class="mt-4">
-                            <div class="my-2">
-                                 <div class="grid grid-cols-10 gap-1 py-2">
-                                    <div class="col-span-7"></div>
-                                    <div class="col-span-1">Subtotal</div>
-                                    <div class="col-span-1">
+                        <div class="mt-4 flex ">
+                            <div class="w-1/2 my-2">
+                                
+                            </div>
+                            <div class="w-1/2 my-2">
+                                <div class="grid grid-cols-5 gap-1 py-2">
+                                    <div class="col-span-1 col-start-3 max-sm:col-span-2">Subtotal</div>
+                                    <div class="col-span-1 max-sm:col-span-3">
                                         <input type="text" class="inp text-right" :value="subtotalFra">
                                     </div>
-                                 </div>
-                            </div>
 
-                            <div class="my-2">
-                                 <div class="grid grid-cols-10 gap-1 py-2">
-                                    <div class="col-span-7"></div>
-                                    <div class="col-span-1">IVA</div>
-                                    <div class="col-span-1">
+                                    <div class="col-span-1 col-start-3 max-sm:col-span-2">IVA</div>
+                                    <div class="col-span-1 max-sm:col-span-3">
                                         <input type="text" class="inp text-right" :value="iva" >
                                     </div>
-                                 </div>
-                            </div>
 
-                            <div class="my-2">
-                                 <div class="grid grid-cols-10 gap-1 py-2">
-                                    <div class="col-span-7"></div>
-                                    <div class="col-span-1">Total</div>
-                                    <div class="col-span-1">
+                                    <div class="col-span-1 col-start-3 max-sm:col-span-2">Total</div>
+                                    <div class="col-span-1 max-sm:col-span-3">
                                         <input type="text" class="inp text-right" :value="totalFra" >
                                     </div>
-                                 </div>
-                            </div>                           
+                                </div>
+
+                            </div>
                         </div>
                         
                     </div>
 
                 </div>
 
-                <div class="md:mx-auto md:mt-10 p-5 bg-white sm:w-80 rounded-xl dark:bg-slate-900 dark:text-white">
+                <div class="md:mx-auto md:mt-10 p-5 bg-white sm:w-80 rounded-xl dark:bg-slate-900 dark:text-white border border-blue-300">
                     col 2
                 </div>
 
@@ -313,7 +311,7 @@ export default {
 }
 
 .dp__theme_light {
-    --dp-background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    --dp-background-color: rgb(219 250 212);
     --dp-text-color: #212121;
     --dp-hover-color: #f3f3f3;
     --dp-hover-text-color: #212121;

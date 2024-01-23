@@ -55,31 +55,31 @@ export default {
 <template>
 	<div class=" space-y-4">
 		<div class="grid grid-cols-10 gap-2 py-2">
-			<div class="col-span-4">
+			<div class="col-span-4 max-sm:col-span-10">
 				<input placeholder="Sample Item " class="inp" :value="title" @change="valueChanged(index, 'title', $event.target.value)">
 				<textarea class="inp" @change="valueChanged(index, 'description', $event.target.value)">{{ description }}</textarea>
 			</div>
-			<div class="col-span-1">
+			<div class="col-span-1 max-sm:col-span-10">
 				<input type="number" class="inp text-right" :value="quantity" @change="valueChanged(index, 'quantity', $event.target.value)">
 			</div>
-			<div class="col-span-1">
+			<div class="col-span-1 max-sm:col-span-10">
 				<input type="number" step='0.01' class="inp text-right" :value="price" @change="valueChanged(index, 'price', $event.target.value)">
 			</div>
-			<div class="col-span-1">
+			<div class="col-span-1 max-sm:col-span-10">
 				<input type="number" step='0.01' class="inp text-right" :value="discount" @input="valueChanged(index, 'discount', $event.target.value)">
 			</div>
-			<div class="col-span-1">
+			<div class="col-span-1 max-sm:col-span-10">
 				<select class="inp text-center" @change="valueChanged(index, 'vat', $event.target.value)">
 					<option :value="vatValues[0]" :selected="vatValues[0] == vat">{{ vatValues[0] }} </option>
 					<option :value="vatValues[1]" :selected="vatValues[1] == vat">{{ vatValues[1] }} </option>
 					<option :value="vatValues[2]" :selected="vatValues[20] == vat">{{ vatValues[2] }} </option>
 				</select>
 			</div>
-			<div class="col-span-1">
+			<div class="col-span-1 max-sm:col-span-10">
 				<input type="text" class="inp text-right" :value="formatValue(subtotal)" @input="valueChanged(index, 'subtotal', $event.target.value)">
 				
 			</div>
-			<div class="col-span-1 flex space-around">
+			<div class="col-span-1 max-sm:col-span-10 flex space-around">
 				<RoundAddButton @click="newItem()" />
 				<span v-if="index > 0"><RoundDeleteButton @click="removeItem(index)" /></span>
 
