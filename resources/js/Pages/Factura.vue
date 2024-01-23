@@ -2,6 +2,7 @@
 
 import TopBar from '@/Components/TopBar.vue';
 import Switch from '@/Components/Switch.vue';
+import SwitchDark from '@/Components/SwitchDark.vue';
 import CompanyData from '@/Components/CompanyData.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import InvoiceItem from '@/Components/InvoiceItem.vue'
@@ -22,12 +23,7 @@ const isDark = useDark({
 const toggleDark = useToggle(isDark); 
 
 
-const recEqValues = {
-    '21': 5.2,
-    '10': 1.4,
-    '4': 0.5,
-    'tabaco': 1.75
-};
+
 
 </script>
 
@@ -51,6 +47,15 @@ export default {
             iva: 0,
             totalFra: 0,
             totalFraStr: '',
+            recargo: false,
+            tabaco: false,
+            totalRecargo: 0,
+            recEqValues: {
+                '21': 5.2,
+                '10': 1.4,
+                '4': 0.5,
+                'tabaco': 1.75
+            },
         };
     },
     methods: {
@@ -94,22 +99,39 @@ export default {
                 this.subtotalFra += elem.subtotal;
                 let vat = elem.subtotal * elem.vat / 100;
                 this.iva += vat;
+
+                if(this.recargo) {
+                    let tasaRecargo = this.tabaco ? this.recEqValues[elem.vat + ''] : this.recEqValues['tabaco'];
+                    let valRecargo = elem.subtotal * tasaRecargo / 100; 
+                    this.totalRecargo += valRecargo;
+                }
             });
 
-            this.totalFra = this.subtotalFra + this.iva;
+            this.totalFra = this.subtotalFra + this.iva + this.totalRecargo;
             this.totalFra = this.formatValue(this.totalFra);
             this.iva = this.formatValue(this.iva);
             this.subtotalFra = this.formatValue(this.subtotalFra);
+            this.totalRecargo = this.formatValue(this.totalRecargo);
         },
         reset() {
             this.subtotalFra = 0;
             this.iva = 0;
             this.totalFra = 0;
+            this.totalRecargo = 0;
         },
         formatValue(value) {
             return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
                 value
             );
+        },
+        toggleRecargo() {
+            this.recargo = !this.recargo;
+            this.recalculate();
+            this.tabaco = false;
+        },
+        toggleTabaco() {
+            this.tabaco = !this.tabaco;
+            this.recalculate();
         }
     }
 }
@@ -126,7 +148,7 @@ export default {
             <div class="flex flex-col justify-between w-full  sm:space-x-8 lg:flex-row md:flex-col sm:space-y-0">
                 <div class="p-5 bg-white max-w-7xl rounded-2xl sm:p-10 dark:bg-slate-900 border border-blue-300">
                     col 1
-                    <Switch @click="toggleDark()" />
+                    <SwitchDark @click="toggleDark()" />
 
                     <div class="mt-8 mb-8 md:grid md:grid-cols-2 gap-6">
                                             
@@ -195,25 +217,51 @@ export default {
                          />
 
                         <div class="mt-4 flex ">
-                            <div class="w-1/2 my-2">
+                            <div class="w-1/2 ">
+                                <div class="py-2 my-2">  
+                                    <input type="checkbox" :checked="recargo" id="recCheck" @change="toggleRecargo()" >
+                                    <label for="recCheck" class="mx-2">Recargo de equivalencia</label>
+                                </div>
+
+                                <div class="py-2 my-2" v-if="recargo">  
+                                    <input type="checkbox" :checked="tabaco" id="tabCheck" @change="toggleTabaco()">
+                                    <label for="tabCheck" class="mx-2">Tabaco</label>
+                                </div>
                                 
                             </div>
                             <div class="w-1/2 my-2">
                                 <div class="grid grid-cols-5 gap-1 py-2">
+                                    
                                     <div class="col-span-1 col-start-3 max-sm:col-span-2">Subtotal</div>
                                     <div class="col-span-1 max-sm:col-span-3">
                                         <input type="text" class="inp text-right" :value="subtotalFra">
                                     </div>
+                                
+                                </div>
 
+                                <div class="grid grid-cols-5 gap-1 py-2">
+                          
                                     <div class="col-span-1 col-start-3 max-sm:col-span-2">IVA</div>
                                     <div class="col-span-1 max-sm:col-span-3">
                                         <input type="text" class="inp text-right" :value="iva" >
                                     </div>
+                            
+                                </div>
 
+                                <div class="grid grid-cols-5 gap-1 py-2" v-if="recargo">
+                          
+                                    <div class="col-span-1 col-start-3 max-sm:col-span-2">R.E.</div>
+                                    <div class="col-span-1 max-sm:col-span-3">
+                                        <input type="text" class="inp text-right" :value="totalRecargo" >
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-5 gap-1 py-2">
                                     <div class="col-span-1 col-start-3 max-sm:col-span-2">Total</div>
                                     <div class="col-span-1 max-sm:col-span-3">
                                         <input type="text" class="inp text-right" :value="totalFra" >
-                                    </div>
+                                    </div>                          
+                                    
                                 </div>
 
                             </div>
